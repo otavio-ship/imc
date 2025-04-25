@@ -1,29 +1,30 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    return render_template('index.html', title="Home" )
 
-@app.route('/calcular_imc', methods=['POST'])
-def calcular_imc():
-    altura = float(request.form['altura'])
-    peso = float(request.form['peso'])
+@app.route('/', methods=['GET', 'POST'])
+def calcular_idade():
+    if request.method == 'POST':
+        try:
+            ano_nascimento = int(request.form.get('ano_nascimento'))
+            ano_atual = 2025
 
-    imc = round(peso /(altura **2),2)
+            if not 1900 <= ano_nascimento <= ano_atual:
+                raise ValueError
 
-    if imc < 18.5:
-        diagnostico = 'Abaixo do peso'
-    elif imc < 24.9:
-        diagnostico = 'Peso normal'
-    elif imc < 29.9:
-        diagnostico = 'Acima do peso'
-    else:
-        diagnostico = 'Obeso'
+            idade = ano_atual - ano_nascimento
+            return render_template('idade.html',
+                                   idade=idade,
+                                   ano_nascimento=ano_nascimento,
+                                   ano_atual=ano_atual)
 
+        except ValueError:
+            erro = "Por favor, digite um ano válido entre 1900 e 2025"
+            return render_template('idade.html', erro=erro)
 
-    return render_template('index.html', imc=imc, diagnostico=diagnostico)
+    return render_template('idade.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
