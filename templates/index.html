@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de IMC</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de IMC</h1>
+        <form action="/calcular_imc" method="post">
+            <label for="altura">Altura (ex.: 1.70):</label>
+            <input type="number" id="altura" name="altura" step="0.01" required>
+
+            <label for="peso">Peso (quilogramas):</label>
+            <input type="number" id="peso" name="peso" step="0.01" required>
+
+            <button type="submit">Calcular IMC</button>
+        </form>
+
+        {% if imc %}
+        <div class="resultado">
+            <h2>Resultado do IMC</h2>
+            <p><strong>IMC:</strong> {{ imc }}</p>
+            <p><strong>Diagnóstico:</strong> {{ diagnostico }}</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
